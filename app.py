@@ -17,7 +17,6 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
-from tensorflow.keras.models import load_model
 from werkzeug.utils import secure_filename
 
 # --- (No change to directory setup) ---
@@ -177,7 +176,7 @@ async def predict(request: PredictRequest):
     ]
     full_matches = list(dict.fromkeys(matches + contains_matches))
 
-    return {"predictions": full_matches[:10]}
+    return {"predictions": full_matches[:7]}
 
 
 @app.get("/check_model_status")
