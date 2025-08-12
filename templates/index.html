@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dynamic Next Word Suggestion</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        />
+
+        <link rel="stylesheet" href="/static/style.css" />
+    </head>
+    <body>
+        <main class="container">
+            <header class="app-header">
+                <h1>Dynamic Next Word Suggestion</h1>
+                <p>
+                    Select a dataset, upload your own, or paste text to get
+                    instant phrase suggestions.
+                </p>
+            </header>
+
+            <section class="card upload-section">
+                <h3>
+                    <i class="fas fa-cloud-upload-alt"></i> Upload New Dataset
+                </h3>
+                <form id="upload-form">
+                    <input
+                        type="file"
+                        id="file-input"
+                        name="file"
+                        accept=".txt"
+                        required
+                    />
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-upload"></i> Upload
+                    </button>
+                </form>
+                <div id="upload-status" class="status-message"></div>
+            </section>
+
+            <section class="card controls-section">
+                <h3><i class="fas fa-cogs"></i> Controls</h3>
+                <div class="controls-grid">
+                    <select id="dataset-select">
+                        <option value="">Loading datasets...</option>
+                    </select>
+                    <button id="train-btn" class="btn btn-primary">
+                        <i class="fas fa-brain"></i> Train Model
+                    </button>
+                    <span id="model-status" class="status-indicator"></span>
+                </div>
+            </section>
+
+            <section id="data-display-area"></section>
+
+            <section class="card prediction-section">
+                <h3><i class="fas fa-keyboard"></i> Prediction Input</h3>
+                <input
+                    type="text"
+                    id="prediction-input"
+                    placeholder="Select and train a model to begin..."
+                />
+                <div id="suggestions-container">
+                    <div id="loading-spinner" class="spinner hidden"></div>
+                    <div id="suggestions"></div>
+                </div>
+            </section>
+
+            <section class="card logs-section">
+                <h3><i class="fas fa-stream"></i> Training Logs</h3>
+                <div id="logs"></div>
+            </section>
+
+            <button id="download-model-btn" class="btn btn-secondary hidden">
+                <i class="fas fa-download"></i> Download Trained Model
+            </button>
+        </main>
+
+        <template id="template-data-preview">
+            <div class="card data-preview-card">
+                <h3><i class="fas fa-file-alt"></i> Dataset Preview</h3>
+                <textarea id="data-preview" readonly></textarea>
+            </div>
+        </template>
+
+        <template id="template-custom-data">
+            <div class="card custom-data-card">
+                <h3><i class="fas fa-paste"></i> Custom Dataset Input</h3>
+                <textarea
+                    id="custom-text"
+                    placeholder="Paste your text corpus here..."
+                ></textarea>
+            </div>
+        </template>
+
+        <script src="/static/script.js"></script>
+    </body>
+</html>

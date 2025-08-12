@@ -1,0 +1,323 @@
+/* --- Base & Typography --- */
+:root {
+    --primary-color: #007bff;
+    --primary-hover: #0056b3;
+    --success-color: #28a745;
+    --success-hover: #218838;
+    --secondary-color: #6c757d;
+    --secondary-hover: #5a6268;
+    --warning-color: #fd7e14;
+    --danger-color: #dc3545;
+    --light-gray: #f8f9fa;
+    --border-color: #dee2e6;
+    --text-color: #343a40;
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --border-radius: 8px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: var(--light-gray);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.app-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.app-header h1 {
+    font-weight: 700;
+    color: var(--primary-color);
+}
+.app-header p {
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+}
+
+h3 {
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* --- Card Layout --- */
+.card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 25px;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* --- Buttons --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+.btn:active {
+    transform: translateY(0);
+}
+.btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+.btn-success {
+    background-color: var(--success-color);
+    color: white;
+}
+.btn-success:hover {
+    background-color: var(--success-hover);
+}
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+.btn-secondary:hover {
+    background-color: var(--secondary-hover);
+}
+
+/* --- Forms & Inputs --- */
+select,
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-family: "Poppins", sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+select:focus,
+input[type="text"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+input[type="file"] {
+    border: 1px dashed var(--border-color);
+    padding: 8px;
+    flex-grow: 1;
+}
+
+/* --- Specific Sections --- */
+.upload-section {
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fafbff;
+}
+
+#upload-form {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+#file-input {
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 5px;
+    font-size: 14px;
+    color: #555;
+    min-width: 200px;
+}
+
+/* Modern styling for the file selector button */
+#file-input::file-selector-button {
+    font-weight: bold;
+    color: var(--primary-color);
+    padding: 8px 12px;
+    border: 1px solid #cce5ff;
+    border-radius: 5px;
+    background-color: #f0f8ff;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+#file-input::file-selector-button:hover {
+    background-color: #e2f0ff;
+    border-color: #b8daff;
+}
+
+#upload-form button {
+    background-color: var(--success-color);
+    color: white;
+}
+#upload-form button:hover {
+    background-color: var(--success-hover);
+}
+
+#upload-status {
+    margin-top: 12px;
+    font-weight: bold;
+    font-size: 14px;
+    min-height: 20px;
+}
+
+.controls-grid {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.controls-grid select {
+    flex-grow: 1;
+}
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+.status-indicator.trained {
+    color: var(--success-color);
+}
+.status-indicator.untrained {
+    color: var(--warning-color);
+}
+
+#data-preview,
+#custom-text {
+    width: 100%;
+    min-height: 200px;
+    background: #fdfdff;
+    font-family: monospace;
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+    overflow-y: auto;
+}
+
+/* --- Prediction & Suggestions --- */
+#suggestions-container {
+    min-height: 60px;
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--light-gray);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.suggestion {
+    background-color: #e9ecef;
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s;
+}
+.suggestion:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: scale(1.05);
+}
+
+/* --- Logs & Spinner --- */
+#logs {
+    height: 150px;
+    background: #212529;
+    color: #ced4da;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-left-color: var(--primary-color);
+    animation: spin 1s ease infinite;
+}
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    .container {
+        gap: 20px;
+    }
+    .card {
+        padding: 20px;
+    }
+    .controls-grid {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    #upload-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .btn {
+        width: 100%;
+    }
+}

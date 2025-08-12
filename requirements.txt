@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+python-multipart
+tensorflow
+scikit-learn
+jinja2
+numpy
+python-multipart
+werkzeug
