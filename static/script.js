@@ -11,40 +11,40 @@ document.addEventListener("DOMContentLoaded", () => {
     const logsDiv = document.getElementById("logs");
     const downloadModelBtn = document.getElementById("download-model-btn");
     const loadingSpinner = document.getElementById("loading-spinner");
-    
-    
+
     const previewTemplate = document.getElementById("template-data-preview");
     const customDataTemplate = document.getElementById("template-custom-data");
 
     let socket;
     let currentDataset = "";
-    
 
     async function populateDatasetDropdown() {
         try {
             const response = await fetch("/get_datasets");
             const datasets = await response.json();
-            datasetSelect.innerHTML = ""; 
+            datasetSelect.innerHTML = "";
 
             if (datasets.length === 0) {
-                datasetSelect.innerHTML = "<option value=''>No datasets found. Please upload one.</option>";
+                datasetSelect.innerHTML =
+                    "<option value=''>No datasets found. Please upload one.</option>";
                 return;
             }
 
-            datasets.forEach(name => {
+            datasets.forEach((name) => {
                 const option = document.createElement("option");
                 option.value = name;
-                option.textContent = name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                option.textContent = name
+                    .replace(/_/g, " ")
+                    .replace(/\b\w/g, (l) => l.toUpperCase());
                 datasetSelect.appendChild(option);
             });
-            
+
             const customOption = document.createElement("option");
             customOption.value = "custom";
             customOption.textContent = "Custom (Manual Input)";
             datasetSelect.appendChild(customOption);
-            
-            datasetSelect.dispatchEvent(new Event('change'));
 
+            datasetSelect.dispatchEvent(new Event("change"));
         } catch (error) {
             console.error("Failed to load datasets:", error);
             datasetSelect.innerHTML = "<option>Error loading datasets</option>";
@@ -52,7 +52,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function connectWebSocket() {
-        socket = new WebSocket(`ws://${window.location.host}/ws`);
+        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+        const wsUrl = `${protocol}//${window.location.host}/ws`;
+        console.log(`Connecting to WebSocket at: ${wsUrl}`);
+
+        socket = new WebSocket(wsUrl);
+
+        socket.onopen = () => {
+            console.log("WebSocket connected successfully.");
+        };
+
         socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
             if (data.status === "training") {
@@ -63,50 +72,66 @@ document.addEventListener("DOMContentLoaded", () => {
                 updateModelStatusUI(true);
             }
         };
-        socket.onclose = () => { setTimeout(connectWebSocket, 1000); };
+
+        socket.onclose = (event) => {
+            console.error("WebSocket disconnected:", event);
+            setTimeout(connectWebSocket, 3000);
+        };
+
+        socket.onerror = (error) => {
+            console.error("WebSocket Error:", error);
+        };
     }
 
     function updateModelStatusUI(isTrained) {
         if (isTrained) {
             modelStatus.innerHTML = `<i class="fas fa-check-circle"></i> Model Trained`;
-            modelStatus.className = 'status-indicator trained';
+            modelStatus.className = "status-indicator trained";
             predictionInput.disabled = false;
             predictionInput.placeholder = "Start typing...";
             downloadModelBtn.classList.remove("hidden");
         } else {
             modelStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Needs Training`;
-            modelStatus.className = 'status-indicator untrained';
+            modelStatus.className = "status-indicator untrained";
             predictionInput.disabled = true;
             predictionInput.placeholder = "Train a model to start typing...";
             downloadModelBtn.classList.add("hidden");
         }
         trainBtn.disabled = false;
         trainBtn.textContent = "Train Model";
-        trainBtn.insertAdjacentHTML('afterbegin', '<i class="fas fa-brain"></i>');
+        trainBtn.insertAdjacentHTML(
+            "afterbegin",
+            '<i class="fas fa-brain"></i>'
+        );
     }
-    
+
     async function checkAndSetInitialStatus() {
         if (!currentDataset || currentDataset === "custom") {
-             updateModelStatusUI(false);
-             trainBtn.disabled = (currentDataset === "");
-             return;
+            updateModelStatusUI(false);
+            trainBtn.disabled = currentDataset === "";
+            return;
         }
-        const response = await fetch(`/check_model_status?dataset=${currentDataset}`);
+        const response = await fetch(
+            `/check_model_status?dataset=${currentDataset}`
+        );
         const data = await response.json();
         updateModelStatusUI(data.is_trained);
     }
-    
+
     async function displayDataContent(dataset) {
-        dataDisplayArea.innerHTML = ''; 
+        dataDisplayArea.innerHTML = "";
         if (dataset === "custom") {
             const customNode = customDataTemplate.content.cloneNode(true);
             dataDisplayArea.appendChild(customNode);
         } else if (dataset) {
             const previewNode = previewTemplate.content.cloneNode(true);
             dataDisplayArea.appendChild(previewNode);
-            const dataPreviewEl = dataDisplayArea.querySelector("#data-preview");
-            
-            const response = await fetch(`/get_dataset_preview?dataset=${dataset}`);
+            const dataPreviewEl =
+                dataDisplayArea.querySelector("#data-preview");
+
+            const response = await fetch(
+                `/get_dataset_preview?dataset=${dataset}`
+            );
             const data = await response.json();
             dataPreviewEl.textContent = data.preview;
         }
@@ -125,8 +150,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const formData = new FormData();
         formData.append("file", fileInput.files[0]);
         uploadStatus.textContent = "Uploading...";
-        uploadStatus.className = 'status-message';
-        
+        uploadStatus.className = "status-message";
+
         try {
             const response = await fetch("/upload_dataset", {
                 method: "POST",
@@ -139,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 uploadStatus.classList.add("success");
                 await populateDatasetDropdown();
                 datasetSelect.value = result.new_dataset_key;
-                datasetSelect.dispatchEvent(new Event('change'));
+                datasetSelect.dispatchEvent(new Event("change"));
             } else {
                 uploadStatus.textContent = `Error: ${result.message}`;
                 uploadStatus.classList.add("error");
@@ -175,13 +200,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 signal: signal,
             });
             const data = await response.json();
-            
+
             if (signal.aborted) return;
 
             loadingSpinner.classList.add("hidden");
 
             if (data.predictions && data.predictions.length > 0) {
-                data.predictions.forEach(word => {
+                data.predictions.forEach((word) => {
                     if (!word) return;
                     const suggestionEl = document.createElement("div");
                     suggestionEl.className = "suggestion";
@@ -195,7 +220,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             }
         } catch (error) {
-            if (error.name !== 'AbortError') { console.error("Prediction error:", error); }
+            if (error.name !== "AbortError") {
+                console.error("Prediction error:", error);
+            }
             loadingSpinner.classList.add("hidden");
         }
     });
@@ -207,16 +234,18 @@ document.addEventListener("DOMContentLoaded", () => {
             logsDiv.innerHTML = "";
             trainBtn.disabled = true;
             trainBtn.textContent = "Training...";
-            socket.send(JSON.stringify({
-                action: "train",
-                dataset: currentDataset,
-                custom_text: customText,
-            }));
+            socket.send(
+                JSON.stringify({
+                    action: "train",
+                    dataset: currentDataset,
+                    custom_text: customText,
+                })
+            );
         }
     });
 
     downloadModelBtn.addEventListener("click", () => {
-        window.open(`/models/${currentDataset}_model.keras`, '_blank');
+        window.open(`/models/${currentDataset}_model.keras`, "_blank");
     });
 
     connectWebSocket();
