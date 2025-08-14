@@ -90,19 +90,24 @@ document.addEventListener("DOMContentLoaded", () => {
             predictionInput.disabled = false;
             predictionInput.placeholder = "Start typing...";
             downloadModelBtn.classList.remove("hidden");
+            trainBtn.disabled = true;
+            trainBtn.innerHTML = `<i class="fas fa-brain"></i> Model Ready`;
         } else {
             modelStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Needs Training`;
             modelStatus.className = "status-indicator untrained";
             predictionInput.disabled = true;
             predictionInput.placeholder = "Train a model to start typing...";
             downloadModelBtn.classList.add("hidden");
+            trainBtn.disabled = false;
+            trainBtn.innerHTML = `<i class="fas fa-brain"></i> Train Model`;
         }
-        trainBtn.disabled = false;
-        trainBtn.textContent = "Train Model";
-        trainBtn.insertAdjacentHTML(
-            "afterbegin",
-            '<i class="fas fa-brain"></i>'
-        );
+        if (currentDataset === "custom") {
+            trainBtn.disabled = false;
+            trainBtn.innerHTML = `<i class="fas fa-brain"></i> Train Model`;
+        }
+        if (trainBtn.textContent.includes("Training...")) {
+            trainBtn.disabled = true;
+        }
     }
 
     async function checkAndSetInitialStatus() {
