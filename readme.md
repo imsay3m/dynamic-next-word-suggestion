@@ -46,8 +46,8 @@ Follow these steps to run the application on your local machine. This is the rec
 1.  **Clone the repository:**
 
     ```bash
-    git clone https://github.com/your-username/your-repo-name.git
-    cd your-repo-name
+    git clone https://github.com/imsay3m/dynamic-next-word-suggestion
+    cd dynamic-next-word-suggestion
     ```
 
 2.  **Build and run with Docker Compose:**
